@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/JSXTransformer.js"></script>
+</head>
+<body>
+<script type="text/jsx">
+    //
+    var Content = React.createClass({
+        getInitialState: function(){
+            return {
+                inputText:""
+            }
+        },
+        handleChange:function(event){
+            this.setState({inputText:event.target.value})
+
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        handleSubmit:function(event){
+            console.log("reply To:" + this.props.selectName + "\n" + this.state.inputText)//接收父组件的值
+        },
+        render: function(){
+            return (<div><textarea placeholder="please enter something..." onChange={this.handleChange}></textarea>
+            <button onClick={this.handleSubmit}>submit</button>
+            </div>)
+        }
+    });
+    //父组件，内容
+    var Comment = React.createClass({
+        getInitialState: function(){
+            return {
+                names: ['bob','sfd','sad'],
+                selectName:""
+            }
+        },
+        selectHandler:function(event){
+            this.setState({selectName:event.target.value});
+
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        render: function(){
+            var options = [];
+            for (var option in this.state.names){
+                options.push(<option value={this.state.names[option]}>{this.state.names[option]}</option>)
+            }
+            return (<div>
+                    <select onChange={this.selectHandler}>
+                        {options}
+                    </select>
+                    <Content selectName={this.state.selectName}/> //selectName把传递给子组件
+                   </div>)
+        }
+    });
+    React.render(<Comment></Comment>,document.body)
+</script>
+</body>
+</html>
